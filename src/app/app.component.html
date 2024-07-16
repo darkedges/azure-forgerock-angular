@@ -1,0 +1,48 @@
+<mat-toolbar color="primary">
+  <a class="title" href="/">{{ title }}</a>
+
+  <div class="toolbar-spacer"></div>
+  <a mat-button [routerLink]="['patientRecord']">Patient Record</a>
+  <a mat-button [routerLink]="['profile']">Profile</a>
+
+  @if (!loginDisplay) {
+  <button mat-raised-button [matMenuTriggerFor]="loginMenu">Login</button>
+  }
+  <mat-menu #loginMenu="matMenu">
+    <button mat-menu-item (click)="loginRedirect()">Login using Redirect</button>
+    <button mat-menu-item (click)="loginPopup()">Login using Popup</button>
+  </mat-menu>
+
+  @if (loginDisplay) {
+  <button mat-raised-button [matMenuTriggerFor]="logoutMenu">Logout</button>
+  }
+  <mat-menu #logoutMenu="matMenu">
+    <button mat-menu-item (click)="logout()">Logout using Redirect</button>
+    <button mat-menu-item (click)="logout(true)">Logout using Popup</button>
+  </mat-menu>
+
+</mat-toolbar>
+<div class="card" *ngIf="stock.name">
+  <div class="img">
+    <img class="icon" [src]="stock.icon" />
+  </div>
+  <div class="textBox">
+    <div class="textContent">
+      <div class="h1">{{stock.name}}<div *ngIf="stock.increased"
+          style="color: green ; margin: 0 10px 0 10px; float: right;">▲</div>
+        <div *ngIf="!stock.increased" style="color: red ; margin: 0 10px 0 10px; float: right;">▼</div>
+      </div>
+      <span class="span">now</span>
+    </div>
+    <div class="detail">Is trading at the price of ${{stock.price}}
+      <div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
+  @if (!isIframe) {
+  <router-outlet></router-outlet>
+  }
+</div>
