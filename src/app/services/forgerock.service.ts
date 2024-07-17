@@ -20,6 +20,8 @@ interface cibaAccessTokenResponse {
   "expires_in": number
 }
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -95,7 +97,7 @@ export class ForgerockService {
     const clientSecret = environment.forgerock.workforceFederatedIdentity.clientSecret;
     const body = new URLSearchParams();
     body.set('grant_type', 'urn:ietf:params:oauth:grant-type:token-exchange')
-    body.set('scope', 'openid transfer')
+    body.set('scope', 'openid read_accounts')
     body.set('subject_token', subject)
     body.set('subject_token_type', 'urn:ietf:params:oauth:token-type:access_token')
     body.set('actor_token', actor)

@@ -7,14 +7,14 @@ export const environment = {
     },
   },
   apiConfig: {
-    scopes: ['User.Read'],
+    scopes: ['https://fram.connectid.darkedges.com/openam/oauth2/.default'],
     uri: 'https://graph.microsoft.com/v1.0/me',
   },
   patientRecord: {
     scopes: ['https://fram.connectid.darkedges.com/openam/oauth2/.default'],
-    uri: 'https://kongapi.darkedges.com.au/provider/api/records/0',
+    uri: 'https://kongapi.darkedges.com.au/provider/api/records/',
   },
-  firebaseConfig : {
+  firebaseConfig: {
     apiKey: "AIzaSyCWelE17KhC5uaSWw8dYSb5i8C5mgfAnks",
     authDomain: "verifymyiddemo.firebaseapp.com",
     databaseURL: "https://verifymyiddemo.firebaseio.com",
@@ -25,13 +25,13 @@ export const environment = {
   },
   forgerock: {
     ciba: {
-      requestUri: '/forgerock/oauth2/bc-authorize',
-      accessTokenUri:'/forgerock/oauth2/access_token',
+      requestUri: 'https://fram.connectid.darkedges.com/openam/oauth2/bc-authorize',
+      accessTokenUri: 'https://fram.connectid.darkedges.com/openam/oauth2/access_token',
       clientId: 'BackChannel',
       clientSecret: 'BackChannel'
     },
     workforceFederatedIdentity: {
-      accessTokenUri:'/forgerock/oauth2/access_token',
+      accessTokenUri: 'https://fram.connectid.darkedges.com/openam/oauth2/access_token',
       clientId: 'SalesforceClient',
       clientSecret: 'SalesforceClient'
     }

@@ -75,10 +75,10 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
     environment.apiConfig.uri,
     environment.apiConfig.scopes
   );
-  protectedResourceMap.set(
-    environment.patientRecord.uri,
-    environment.patientRecord.scopes
-  );
+  // protectedResourceMap.set(
+  //   environment.patientRecord.uri,
+  //   environment.patientRecord.scopes
+  // );
 
   return {
     interactionType: InteractionType.Redirect,

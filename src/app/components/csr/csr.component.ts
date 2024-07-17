@@ -1,6 +1,6 @@
 import { AsyncPipe, CommonModule, JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, ContentChild, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChild, TemplateRef } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -15,6 +15,16 @@ import { ForgerockService } from 'src/app/services/forgerock.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { environment } from 'src/environments/environment';
 import { JwtHighlightComponent } from '../jwt-highlight.component';
+import { KongService, PatientRecord } from 'src/app/services/kong.service';
+import {
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+
 interface User {
   email: string,
 };
@@ -58,6 +68,9 @@ export class CSRComponent {
   delegatedAccessToken = ""
   decodedDelegatedAccessToken = ""
 
+  showPatientRecord: boolean = false
+  patientRecord: PatientRecord | undefined
+
   loading$: Observable<boolean>;
   @ContentChild("loading")
   customLoadingIndicator: TemplateRef<any> | null = null;
@@ -69,9 +82,11 @@ export class CSRComponent {
     private http: HttpClient,
     private store: Firestore,
     private forgerock: ForgerockService,
+    private kong: KongService,
     private loading: LoadingService,
     private localStorage: LocalStorageService,
-    private authService: MsalService
+    private authService: MsalService,
+    private dialog: MatDialog
   ) {
     const userCollection = collection(this.store, 'users');
     this.users$ = collectionData(userCollection) as Observable<User[]>;
@@ -95,7 +110,8 @@ export class CSRComponent {
       });
   }
 
-  async getUserAccessToken(username: string) {
+  async getUserAccessToken(username: string, index: number) {
+    this.showPatientRecord = false
     this.userAccessToken = await this.forgerock.getUserAccessToken(username);
     this.decodedUserAccessToken = jwtDecode(this.userAccessToken)
     this.localStorage.set('subjectAccessToken', this.userAccessToken)
@@ -106,6 +122,14 @@ export class CSRComponent {
         this.decodedDelegatedAccessToken = jwtDecode(x.access_token);
         this.localStorage.set('delegatedAccessToken', x.access_token)
         this.showDelegatedAccessTokenCard = true;
+        this.kong.getPatientRecord(x.access_token, index + 10)
+          .subscribe(data => {
+            this.patientRecord = data;
+            this.showPatientRecord = true;
+          }, error => {
+            this.dialog.open(AccessDeniedDialog);
+            this.showPatientRecord = false;
+          })
       })
   }
 
@@ -126,3 +150,12 @@ export class CSRComponent {
   }
 
 }
+
+@Component({
+  selector: 'dialog-access-denied',
+  templateUrl: 'accessDeniedDialog.html',
+  standalone: true,
+  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class AccessDeniedDialog {}
