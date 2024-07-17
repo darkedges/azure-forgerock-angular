@@ -12,7 +12,7 @@ export const environment = {
   },
   patientRecord: {
     scopes: ['https://fram.connectid.darkedges.com/openam/oauth2/.default'],
-    uri: 'https://kongapi.darkedges.com.au/provider/api/records/0',
+    uri: 'https://kongapi.darkedges.com.au/provider/api/records/',
   },
   firebaseConfig: {
     apiKey: "AIzaSyCWelE17KhC5uaSWw8dYSb5i8C5mgfAnks",
