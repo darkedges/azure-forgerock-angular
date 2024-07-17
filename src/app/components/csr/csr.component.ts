@@ -2,17 +2,19 @@ import { AsyncPipe, CommonModule, JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, ContentChild, TemplateRef } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { ForgerockService } from 'src/app/services/forgerock.service';
+import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { LoadingService } from 'src/app/services/loading.service';
-import { LocalStorageService } from 'ngx-localstorage';
-import { jwtDecode } from 'jwt-decode';
 import { MsalService } from '@azure/msal-angular';
 import { SilentRequest } from '@azure/msal-browser';
+import { jwtDecode } from 'jwt-decode';
+import { Highlight } from 'ngx-highlightjs';
+import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
+import { LocalStorageService } from 'ngx-localstorage';
+import { Observable } from 'rxjs';
+import { ForgerockService } from 'src/app/services/forgerock.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { environment } from 'src/environments/environment';
-import { MatCardModule } from '@angular/material/card';
-
+import { JwtHighlightComponent } from '../jwt-highlight.component';
 interface User {
   email: string,
 };
@@ -26,7 +28,10 @@ interface User {
     JsonPipe,
     CommonModule,
     MatProgressSpinnerModule,
-    MatCardModule
+    MatCardModule,
+    JwtHighlightComponent,
+    Highlight,
+    HighlightLineNumbers
   ],
   standalone: true,
 })
@@ -95,6 +100,13 @@ export class CSRComponent {
     this.decodedUserAccessToken = jwtDecode(this.userAccessToken)
     this.localStorage.set('subjectAccessToken', this.userAccessToken)
     this.showUserAccessTokenCard = true;
+    this.forgerock.getTokenExchange(this.localStorage.get('actorAccessToken')!, this.userAccessToken)
+      .subscribe(x => {
+        this.delegatedAccessToken = x.access_token
+        this.decodedDelegatedAccessToken = jwtDecode(x.access_token);
+        this.localStorage.set('delegatedAccessToken', x.access_token)
+        this.showDelegatedAccessTokenCard = true;
+      })
   }
 
   updateUserAccessToken() {

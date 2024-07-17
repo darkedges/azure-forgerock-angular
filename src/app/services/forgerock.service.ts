@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, lastValueFrom, map, mergeMap } from 'rxjs';
-import { LoadingService } from './loading.service';
-import { environment } from 'src/environments/environment';
 import { KJUR } from 'jsrsasign';
+import { Observable, lastValueFrom, mergeMap } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { LoadingService } from './loading.service';
 
 interface cibaRequestResponse {
   auth_req_id: string
@@ -11,12 +11,12 @@ interface cibaRequestResponse {
   interval: number
 }
 
-interface cibaAccessTokenResponse{
+interface cibaAccessTokenResponse {
   "access_token": string
   "refresh_token": string
   "scope": string
   "id_token": string
-  "token_type":string
+  "token_type": string
   "expires_in": number
 }
 
@@ -30,7 +30,7 @@ export class ForgerockService {
   ) { }
 
   async getUserAccessToken(username: string) {
-    const at:cibaAccessTokenResponse = await lastValueFrom(this.getCIBARequest(username))
+    const at: cibaAccessTokenResponse = await lastValueFrom(this.getCIBARequest(username))
     return at.access_token;
   }
 
@@ -83,6 +83,28 @@ export class ForgerockService {
           return this.http.post<cibaAccessTokenResponse>(url, body.toString(), options);
         })
       );
+  }
+
+  getTokenExchange(actor: string, subject: string) {
+    const url = environment.forgerock.workforceFederatedIdentity.accessTokenUri;
+    const clientId = environment.forgerock.workforceFederatedIdentity.clientId;
+    const clientSecret = environment.forgerock.workforceFederatedIdentity.clientSecret;
+    const body = new URLSearchParams();
+    body.set('grant_type', 'urn:ietf:params:oauth:grant-type:token-exchange')
+    body.set('scope', 'openid transfer')
+    body.set('subject_token', subject)
+    body.set('subject_token_type', 'urn:ietf:params:oauth:token-type:access_token')
+    body.set('actor_token', actor)
+    body.set('actor_token_type', 'urn:ietf:params:oauth:token-type:access_token')
+    body.set('requested_token_type', 'urn:ietf:params:oauth:token-type:access_token')
+    body.set('client_id', clientId)
+    body.set('client_secret', clientSecret)
+    let options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded'
+      })
+    };
+    return this.http.post<any>(url, body.toString(), options);
   }
 
   generateSignedPayload(username: string): string {

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
@@ -9,6 +10,8 @@ import {
   importProvidersFrom,
   provideZoneChangeDetection,
 } from '@angular/core';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
@@ -34,13 +37,11 @@ import {
   LogLevel,
   PublicClientApplication,
 } from '@azure/msal-browser';
+import { provideHighlightOptions } from 'ngx-highlightjs';
+import { provideNgxLocalstorage } from 'ngx-localstorage';
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { CommonModule } from '@angular/common';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
-import { provideNgxLocalstorage } from 'ngx-localstorage';
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
   console.log(message);
@@ -133,11 +134,15 @@ export const appConfig: ApplicationConfig = {
     },
     MsalService,
     MsalGuard,
-    MsalBroadcastService, 
+    MsalBroadcastService,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)), provideFirestore(() => getFirestore()),
     provideNgxLocalstorage({
       prefix: 'demo',
       delimiter: '@'
-  })
+    }),
+    provideHighlightOptions({
+      fullLibraryLoader: () => import('highlight.js'),
+      lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
+    })
   ],
 };

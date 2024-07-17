@@ -32,13 +32,17 @@
       <mat-card appearance="outlined" class="card">
         <mat-card-header>JWT</mat-card-header>
         <mat-card-content>
-          {{csrAccessToken}}
+          <app-jwthighlight [jwt]="csrAccessToken"></app-jwthighlight>
         </mat-card-content>
       </mat-card>
       <mat-card appearance="outlined" class="card">
         <mat-card-header>Decoded JSON</mat-card-header>
         <mat-card-content>
-          {{decodedCsrAccessToken|json}}
+          <pre>
+            <code [highlight]="decodedCsrAccessToken|json"
+            language="json"
+                  lineNumbers></code>
+          </pre>
         </mat-card-content>
       </mat-card>
     </div>
@@ -52,13 +56,17 @@
       <mat-card appearance="outlined" class="card">
         <mat-card-header>JWT</mat-card-header>
         <mat-card-content>
-          {{workforceAccessToken}}
+          <app-jwthighlight [jwt]="workforceAccessToken"></app-jwthighlight>
         </mat-card-content>
       </mat-card>
       <mat-card appearance="outlined" class="card">
         <mat-card-header>Decoded JSON</mat-card-header>
         <mat-card-content>
-          {{decodedWorkforceAccessToken|json}}
+          <pre>
+            <code [highlight]="decodedWorkforceAccessToken|json"
+            language="json"
+                  lineNumbers></code>
+          </pre>
         </mat-card-content>
       </mat-card>
     </div>
@@ -72,13 +80,17 @@
       <mat-card appearance="outlined" class="card">
         <mat-card-header>JWT</mat-card-header>
         <mat-card-content>
-          {{userAccessToken}}
+          <app-jwthighlight [jwt]="userAccessToken"></app-jwthighlight>
         </mat-card-content>
       </mat-card>
       <mat-card appearance="outlined" class="card">
         <mat-card-header>Decoded JSON</mat-card-header>
         <mat-card-content>
-          {{decodedUserAccessToken|json}}
+          <pre>
+            <code [highlight]="decodedUserAccessToken|json"
+            language="json"
+                  lineNumbers></code>
+          </pre>
         </mat-card-content>
       </mat-card>
     </div>
@@ -92,13 +104,17 @@
       <mat-card appearance="outlined" class="card">
         <mat-card-header>JWT</mat-card-header>
         <mat-card-content>
-          {{delegatedAccessToken}}
+          <app-jwthighlight [jwt]="delegatedAccessToken"></app-jwthighlight>
         </mat-card-content>
       </mat-card>
       <mat-card appearance="outlined" class="card">
         <mat-card-header>Decoded JSON</mat-card-header>
         <mat-card-content>
-          {{decodedDelegatedAccessToken|json}}
+          <pre>
+            <code [highlight]="decodedDelegatedAccessToken|json"
+            language="json"
+                  lineNumbers></code>
+          </pre>
         </mat-card-content>
       </mat-card>
     </div>
