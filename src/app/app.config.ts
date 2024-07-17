@@ -36,6 +36,11 @@ import {
 } from '@azure/msal-browser';
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { CommonModule } from '@angular/common';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { provideNgxLocalstorage } from 'ngx-localstorage';
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
   console.log(message);
@@ -96,6 +101,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     importProvidersFrom(
       BrowserModule,
+      CommonModule,
       MatButtonModule,
       MatToolbarModule,
       MatListModule,
@@ -106,6 +112,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
       multi: true,
     },
     {
@@ -122,6 +133,11 @@ export const appConfig: ApplicationConfig = {
     },
     MsalService,
     MsalGuard,
-    MsalBroadcastService,
+    MsalBroadcastService, 
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)), provideFirestore(() => getFirestore()),
+    provideNgxLocalstorage({
+      prefix: 'demo',
+      delimiter: '@'
+  })
   ],
 };

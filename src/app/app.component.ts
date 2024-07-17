@@ -43,18 +43,11 @@ export class AppComponent implements OnInit, OnDestroy {
   loginDisplay = false;
   private readonly _destroying$ = new Subject<void>();
 
-  private webSocket: WebSocket;
-  stock: any = {};
-
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private authService: MsalService,
     private msalBroadcastService: MsalBroadcastService
   ) {
-    this.webSocket = new WebSocket('ws://localhost:8080/provider/v1.0/stocks');
-    this.webSocket.onmessage = (event) => {
-      this.stock = JSON.parse(event.data)
-    };
 
   }
 

@@ -14,4 +14,26 @@ export const environment = {
     scopes: ['https://fram.connectid.darkedges.com/openam/oauth2/.default'],
     uri: 'https://kongapi.darkedges.com.au/provider/api/records/0',
   },
+  firebaseConfig : {
+    apiKey: "AIzaSyCWelE17KhC5uaSWw8dYSb5i8C5mgfAnks",
+    authDomain: "verifymyiddemo.firebaseapp.com",
+    databaseURL: "https://verifymyiddemo.firebaseio.com",
+    projectId: "verifymyiddemo",
+    storageBucket: "verifymyiddemo.appspot.com",
+    messagingSenderId: "746700244440",
+    appId: "1:746700244440:web:c5951acc1073a9a8c05ead"
+  },
+  forgerock: {
+    ciba: {
+      requestUri: 'https://fram.connectid.darkedges.com/openam/oauth2/bc-authorize',
+      accessTokenUri:'https://fram.connectid.darkedges.com/openam/oauth2/access_token',
+      clientId: 'BackChannel',
+      clientSecret: 'BackChannel'
+    },
+    workforceFederatedIdentity: {
+      accessTokenUri:'https://fram.connectid.darkedges.com/openam/oauth2/access_token',
+      clientId: 'SalesforceClient',
+      clientSecret: 'SalesforceClient'
+    }
+  }
 };

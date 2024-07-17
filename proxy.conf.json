@@ -1,0 +1,11 @@
+{
+    "/forgerock": {
+      "target": "https://fram.connectid.darkedges.com",
+      "secure": true,
+      "pathRewrite": {
+        "^/forgerock": "https://fram.connectid.darkedges.com/openam"
+      },
+      "logLevel": "debug",
+      "changeOrigin": true
+    }
+  }

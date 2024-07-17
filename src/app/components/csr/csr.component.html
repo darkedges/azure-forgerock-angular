@@ -1,0 +1,106 @@
+<mat-card appearance="outlined">
+  <mat-card-header>Users</mat-card-header>
+  <mat-card-content>
+    <ul>
+      @for (user of (users$ | async); track user) {
+      <li>
+        <a (click)="getUserAccessToken(user.email)">{{ user.email }}</a>
+      </li>
+      }
+    </ul>
+  </mat-card-content>
+</mat-card>
+@if(loading$ | async) {
+
+<div class="spinner-container">
+  @if(customLoadingIndicator) {
+
+  <ng-container *ngTemplateOutlet="customLoadingIndicator" />
+
+  } @else {
+
+  <mat-spinner />
+
+  }
+</div>
+
+}
+<mat-card appearance="outlined" *ngIf="showCSRAccessTokenCard">
+  <mat-card-header (click)="updateCSRAccessToken()">CSR AccessToken (original)</mat-card-header>
+  <mat-card-content>
+    <div class="flex-container preCode" *ngIf="showCSRAccessToken">
+      <mat-card appearance="outlined" class="card">
+        <mat-card-header>JWT</mat-card-header>
+        <mat-card-content>
+          {{csrAccessToken}}
+        </mat-card-content>
+      </mat-card>
+      <mat-card appearance="outlined" class="card">
+        <mat-card-header>Decoded JSON</mat-card-header>
+        <mat-card-content>
+          {{decodedCsrAccessToken|json}}
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card appearance="outlined" *ngIf="showWorkforceAccessTokenCard">
+  <mat-card-header (click)="updateWorkforceAccessToken()">CSR AccessToken (workforce federated)</mat-card-header>
+  <mat-card-content>
+    <div class="flex-container preCode" *ngIf="showWorkforceAccessToken">
+      <mat-card appearance="outlined" class="card">
+        <mat-card-header>JWT</mat-card-header>
+        <mat-card-content>
+          {{workforceAccessToken}}
+        </mat-card-content>
+      </mat-card>
+      <mat-card appearance="outlined" class="card">
+        <mat-card-header>Decoded JSON</mat-card-header>
+        <mat-card-content>
+          {{decodedWorkforceAccessToken|json}}
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card appearance="outlined" *ngIf="showUserAccessTokenCard">
+  <mat-card-header (click)="updateUserAccessToken()">User AccessToken</mat-card-header>
+  <mat-card-content>
+    <div class="flex-container preCode" *ngIf="showUserAccessToken">
+      <mat-card appearance="outlined" class="card">
+        <mat-card-header>JWT</mat-card-header>
+        <mat-card-content>
+          {{userAccessToken}}
+        </mat-card-content>
+      </mat-card>
+      <mat-card appearance="outlined" class="card">
+        <mat-card-header>Decoded JSON</mat-card-header>
+        <mat-card-content>
+          {{decodedUserAccessToken|json}}
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card appearance="outlined" *ngIf="showDelegatedAccessTokenCard">
+  <mat-card-header (click)="updateDelegatedAccessToken()">Delegated AccessToken</mat-card-header>
+  <mat-card-content>
+    <div class="flex-container preCode" *ngIf="showDelegatedAccessToken">
+      <mat-card appearance="outlined" class="card">
+        <mat-card-header>JWT</mat-card-header>
+        <mat-card-content>
+          {{delegatedAccessToken}}
+        </mat-card-content>
+      </mat-card>
+      <mat-card appearance="outlined" class="card">
+        <mat-card-header>Decoded JSON</mat-card-header>
+        <mat-card-content>
+          {{decodedDelegatedAccessToken|json}}
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card-content>
+</mat-card>
