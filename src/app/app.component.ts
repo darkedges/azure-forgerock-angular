@@ -38,7 +38,7 @@ import { filter, takeUntil } from 'rxjs/operators';
   ],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'Angular 18 Sample - MSAL Angular v3';
+  title = 'VerifyMyId Provider Playground';
   isIframe = false;
   loginDisplay = false;
   private readonly _destroying$ = new Subject<void>();

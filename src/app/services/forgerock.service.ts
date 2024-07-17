@@ -67,22 +67,24 @@ export class ForgerockService {
     };
     return this.http.post<cibaRequestResponse>(url, body.toString(), options)
       .pipe(
-        mergeMap((request) => {
-          const url = environment.forgerock.ciba.accessTokenUri;
-          const clientId = environment.forgerock.ciba.clientId;
-          const clientSecret = environment.forgerock.ciba.clientSecret;
-          const body = new URLSearchParams();
-          body.set('auth_req_id', request.auth_req_id)
-          body.set('grant_type', 'urn:openid:params:grant-type:ciba')
-          let options = {
-            headers: new HttpHeaders({
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
-            })
-          };
-          return this.http.post<cibaAccessTokenResponse>(url, body.toString(), options);
-        })
+        mergeMap((r) => this.getCIBAAccessToken(r))
       );
+  }
+
+  getCIBAAccessToken(request: any) {
+    const url = environment.forgerock.ciba.accessTokenUri;
+    const clientId = environment.forgerock.ciba.clientId;
+    const clientSecret = environment.forgerock.ciba.clientSecret;
+    const body = new URLSearchParams();
+    body.set('auth_req_id', request.auth_req_id)
+    body.set('grant_type', 'urn:openid:params:grant-type:ciba')
+    let options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
+      })
+    };
+    return this.http.post<cibaAccessTokenResponse>(url, body.toString(), options);
   }
 
   getTokenExchange(actor: string, subject: string) {
