@@ -2,13 +2,13 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 
-export interface PatientRecord{
+export interface PatientRecord {
     id: string
     patient: string
     doctor: string
     region: string
     notes: string
-  }
+}
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +18,8 @@ export class KongService {
         private http: HttpClient
     ) { }
 
-     getPatientRecord(accessToken: string, index: number) {
-        const url = environment.patientRecord.uri+index;
+    getPatientRecord(accessToken: string, index: string) {
+        const url = environment.patientRecord.uri + index;
         let options = {
             headers: new HttpHeaders({
                 'Authorization': 'Bearer ' + accessToken

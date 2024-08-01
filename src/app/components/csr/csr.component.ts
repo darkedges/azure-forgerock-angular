@@ -2,7 +2,15 @@ import { AsyncPipe, CommonModule, JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, ContentChild, TemplateRef } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import {
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MsalService } from '@azure/msal-angular';
 import { SilentRequest } from '@azure/msal-browser';
@@ -12,21 +20,14 @@ import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 import { LocalStorageService } from 'ngx-localstorage';
 import { Observable } from 'rxjs';
 import { ForgerockService } from 'src/app/services/forgerock.service';
+import { KongService, PatientRecord } from 'src/app/services/kong.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { environment } from 'src/environments/environment';
 import { JwtHighlightComponent } from '../jwt-highlight.component';
-import { KongService, PatientRecord } from 'src/app/services/kong.service';
-import {
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogTitle,
-} from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
 
 interface User {
   email: string,
+  rowId: string
 };
 
 @Component({
@@ -110,7 +111,7 @@ export class CSRComponent {
       });
   }
 
-  async getUserAccessToken(username: string, index: number) {
+  async getUserAccessToken(username: string, index: string) {
     this.showPatientRecord = false
     this.userAccessToken = await this.forgerock.getUserAccessToken(username);
     this.decodedUserAccessToken = jwtDecode(this.userAccessToken)
@@ -122,7 +123,7 @@ export class CSRComponent {
         this.decodedDelegatedAccessToken = jwtDecode(x.access_token);
         this.localStorage.set('delegatedAccessToken', x.access_token)
         this.showDelegatedAccessTokenCard = true;
-        this.kong.getPatientRecord(x.access_token, index + 10)
+        this.kong.getPatientRecord(x.access_token, index)
           .subscribe(data => {
             this.patientRecord = data;
             this.showPatientRecord = true;
@@ -158,4 +159,4 @@ export class CSRComponent {
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccessDeniedDialog {}
+export class AccessDeniedDialog { }
